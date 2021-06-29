@@ -1,0 +1,8 @@
+DATASET:
+  NAME: MPIIGaze
+  DATASET_PATH: ~/datasets/MPIIGaze.h5
+EXPERIMENT:
+  TEST_ID: 0
+VAL:
+  USE_TEST_AS_VAL: false
+  VAL_RATIO: 0.1

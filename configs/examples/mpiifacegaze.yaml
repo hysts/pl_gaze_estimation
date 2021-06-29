@@ -1,0 +1,116 @@
+DEVICE:
+  PRECISION: 32
+  GPUS: 1
+  TPU_CORES: null
+  ACCELERATOR: null
+  USE_DDPPLUGIN: true
+  SYNC_BN: false
+  CUDNN:
+    BENCHMARK: true
+    DETERMINISTIC: false
+  AMP:
+    BACKEND: native
+    LEVEL: O0
+EXPERIMENT:
+  SEED: 0
+  ROOT_DIR : experiments/mpiifacegaze
+  OUTPUT_DIR: null
+  RESUME: null
+  VAL_PERIOD: 1
+  TEST_ID: 0
+TRAIN:
+  BATCH_SIZE: 32
+  BATCH_ACCUMULATION: 1
+  NUM_WORKERS: 8
+  PIN_MEMORY: true
+  SHUFFLE: true
+  DROP_LAST: true
+VAL:
+  BATCH_SIZE: 256
+  NUM_WORKERS: 8
+  PIN_MEMORY: true
+  USE_TEST_AS_VAL: false
+  VAL_RATIO: 0.1
+  VAL_INDICES: null
+TEST:
+  RUN_TEST: false
+LOG:
+  SHOW_PROGRESS_BAR: false
+  PROGRESS_BAR_REFRESH_RATE: null
+  SHOW_TRAIN_IN_PROGRESS_BAR: true
+  LOG_ETA: true
+  LOG_PERIOD: 100
+  CHECKPOINT:
+    FILENAME: '{epoch:04d}'
+    PERIOD: 1
+    TOP_K: -1
+    SAVE_LAST: false
+    VERBOSE: false
+  USE_CSV_LOGGER: true
+  USE_TENSORBOARD: true
+  TENSORBOARD:
+    LOG_DIR: tensorboard
+    DEFAULT_HP_METRIC: false
+  USE_WANDB: true
+  WANDB:
+    PROJECT: pl_mpiifacegaze
+    RUN_ID: null
+    GROUP: null
+  USE_CONSOLE_LOGGER: true
+  CONSOLE:
+    SHOW_CONFIG: true
+    TIMESTAMP_COLOR: green
+    STAGE_NAME_COLOR: green
+    TRAIN_KEY_COLOR: magenta
+    VAL_KEY_COLOR: cyan
+DEBUG:
+  DEBUG: false
+  FAST_DEV_RUN: true
+  NUM_SANITY_VAL_STEPS: 2
+  PROFILER: null
+  WEIGHT_SUMMARY: top
+DATASET:
+  NAME: MPIIFaceGaze
+  DATASET_PATH: ~/datasets/MPIIFaceGaze.h5
+  IMAGE_SIZE: 224
+  N_CHANNELS: 3
+  MEAN: [0.485, 0.456, 0.406]  # RGB
+  STD: [0.229, 0.224, 0.225]  # RGB
+  TRANSFORM:
+    TRAIN:
+      HORIZONTAL_FLIP: false
+      RESIZE: ${DATASET.IMAGE_SIZE}
+    VAL:
+      RESIZE: ${DATASET.IMAGE_SIZE}
+    TEST:
+      RESIZE: ${DATASET.IMAGE_SIZE}
+MODEL:
+  TYPE: mpiifacegaze
+  NAME: resnet_simple
+  PRETRAINED:
+    PATH: null
+    KEY: model
+    REMOVE_PREFIX: null
+    ADD_PREFIX: null
+  BACKBONE:
+    NAME: resnet_simple
+    PRETRAINED: resnet18
+    RESNET_BLOCK: basic
+    RESNET_LAYERS: [2, 2, 2]
+  LOSS:
+    TYPE: l1
+OPTIMIZER:
+  NAME: sgd
+  LR: 0.1
+  WEIGHT_DECAY: 0.0001
+  NO_WEIGHT_DECAY_ON_BN: true
+  NO_WEIGHT_DECAY_ON_BIAS: true
+  SGD:
+    MOMENTUM: 0.9
+    NESTEROV: true
+SCHEDULER:
+  NAME: multistep
+  EPOCHS: 15
+  MULTISTEP:
+    MILESTONES: [10, 13]
+    GAMMA: 0.1

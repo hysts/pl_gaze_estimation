@@ -1,0 +1,28 @@
+MODEL:
+  TYPE: mpiigaze
+  NAME: resnet_preact
+  PRETRAINED:
+    PATH: null
+    KEY: model
+    REMOVE_PREFIX: null
+    ADD_PREFIX: null
+  RESNET_PREACT:
+    DEPTH: 8
+    INITIAL_CHANNELS: 16
+    BLOCK_TYPE: basic
+  LOSS:
+    TYPE: l2
+  INIT:
+    CONV:
+      TYPE: kaiming_normal
+      KAIMING:
+        MODE: fan_out
+        NONLINEARITY: relu
+    LINEAR:
+      TYPE: xavier_normal
+      XAVIER:
+        GAIN: 1
+      BIAS: 0
+    BN:
+      WEIGHT: 1
+      BIAS: 0

@@ -1,0 +1,11 @@
+MODEL:
+  TYPE: eth_xgaze
+  NAME: resnet18
+  PRETRAINED:
+    USE_DEFAULT: false
+    PATH: null
+    KEY: model
+    REMOVE_PREFIX: null
+    ADD_PREFIX: null
+  LOSS:
+    TYPE: l1

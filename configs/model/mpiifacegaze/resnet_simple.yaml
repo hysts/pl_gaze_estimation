@@ -1,0 +1,30 @@
+MODEL:
+  TYPE: mpiifacegaze
+  NAME: resnet_simple
+  PRETRAINED:
+    PATH: null
+    KEY: model
+    REMOVE_PREFIX: null
+    ADD_PREFIX: null
+  BACKBONE:
+    NAME: resnet_simple
+    PRETRAINED: resnet18
+    RESNET_BLOCK: basic
+    RESNET_LAYERS: [2, 2, 2]
+  LOSS:
+    TYPE: l1
+  #INIT:
+  #  CONV:
+  #    TYPE: kaiming_normal
+  #    KAIMING:
+  #      MODE: fan_out
+  #      NONLINEARITY: relu
+  #    BIAS: 0
+  #  LINEAR:
+  #    TYPE: xavier_normal
+  #    XAVIER:
+  #      GAIN: 1.0
+  #    BIAS: 0
+  #  BN:
+  #    WEIGHT: 1
+  #    BIAS: 0

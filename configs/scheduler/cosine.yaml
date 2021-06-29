@@ -1,0 +1,5 @@
+SCHEDULER:
+  NAME: cosine
+  EPOCHS: 200
+  COSINE:
+    LAST_LR: 0.0001

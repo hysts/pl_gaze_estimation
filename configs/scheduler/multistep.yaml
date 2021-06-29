@@ -1,0 +1,6 @@
+SCHEDULER:
+  NAME: multistep
+  EPOCHS: 200
+  MULTISTEP:
+    MILESTONES: [100, 150]
+    GAMMA: 0.1

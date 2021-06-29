@@ -1,0 +1,9 @@
+OPTIMIZER:
+  NAME: adamw
+  LR: 0.001
+  WEIGHT_DECAY: 0.01
+  NO_WEIGHT_DECAY_ON_BN: true
+  NO_WEIGHT_DECAY_ON_BIAS: true
+  ADAMW:
+    BETAS: [0.9, 0.999]
+    AMSGRAD: false

@@ -1,0 +1,10 @@
+MODEL:
+  TYPE: mpiigaze
+  NAME: lenet
+  PRETRAINED:
+    PATH: null
+    KEY: model
+    REMOVE_PREFIX: null
+    ADD_PREFIX: null
+  LOSS:
+    TYPE: l2

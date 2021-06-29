@@ -1,0 +1,99 @@
+DEVICE:
+  PRECISION: 32
+  GPUS: 1
+  TPU_CORES: null
+  ACCELERATOR: null
+  USE_DDPPLUGIN: true
+  SYNC_BN: false
+  CUDNN:
+    BENCHMARK: true
+    DETERMINISTIC: false
+  AMP:
+    BACKEND: native
+    LEVEL: O0
+EXPERIMENT:
+  SEED: 0
+  ROOT_DIR : experiments/mpiigaze
+  OUTPUT_DIR: null
+  RESUME: null
+  VAL_PERIOD: 1
+  TEST_ID: 0
+TRAIN:
+  BATCH_SIZE: 32
+  BATCH_ACCUMULATION: 1
+  NUM_WORKERS: 8
+  PIN_MEMORY: true
+  SHUFFLE: true
+  DROP_LAST: true
+VAL:
+  BATCH_SIZE: 256
+  NUM_WORKERS: 8
+  PIN_MEMORY: true
+  USE_TEST_AS_VAL: false
+  VAL_RATIO: 0.1
+  VAL_INDICES: null
+TEST:
+  RUN_TEST: false
+LOG:
+  SHOW_PROGRESS_BAR: false
+  PROGRESS_BAR_REFRESH_RATE: null
+  SHOW_TRAIN_IN_PROGRESS_BAR: true
+  LOG_ETA: true
+  LOG_PERIOD: 100
+  CHECKPOINT:
+    FILENAME: '{epoch:04d}'
+    PERIOD: 1
+    TOP_K: -1
+    SAVE_LAST: false
+    VERBOSE: false
+  USE_CSV_LOGGER: true
+  USE_TENSORBOARD: true
+  TENSORBOARD:
+    LOG_DIR: tensorboard
+    DEFAULT_HP_METRIC: false
+  USE_WANDB: true
+  WANDB:
+    PROJECT: pl_mpiigaze
+    RUN_ID: null
+    GROUP: null
+  USE_CONSOLE_LOGGER: true
+  CONSOLE:
+    SHOW_CONFIG: true
+    TIMESTAMP_COLOR: green
+    STAGE_NAME_COLOR: green
+    TRAIN_KEY_COLOR: magenta
+    VAL_KEY_COLOR: cyan
+DEBUG:
+  DEBUG: false
+  FAST_DEV_RUN: true
+  NUM_SANITY_VAL_STEPS: 2
+  PROFILER: null
+  WEIGHT_SUMMARY: top
+DATASET:
+  NAME: MPIIGaze
+  DATASET_PATH: ~/datasets/MPIIGaze.h5
+MODEL:
+  TYPE: mpiigaze
+  NAME: lenet
+  PRETRAINED:
+    PATH: null
+    KEY: model
+    REMOVE_PREFIX: null
+    ADD_PREFIX: null
+  LOSS:
+    TYPE: l2
+OPTIMIZER:
+  NAME: sgd
+  LR: 0.1
+  WEIGHT_DECAY: 0.0001
+  NO_WEIGHT_DECAY_ON_BN: true
+  NO_WEIGHT_DECAY_ON_BIAS: true
+  SGD:
+    MOMENTUM: 0.9
+    NESTEROV: true
+SCHEDULER:
+  NAME: multistep
+  EPOCHS: 40
+  MULTISTEP:
+    MILESTONES: [30, 35]
+    GAMMA: 0.1

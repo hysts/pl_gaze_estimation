@@ -1,0 +1,11 @@
+coloredlogs
+h5py
+omegaconf
+pillow-simd
+pytorch-lightning
+pytorch-warmup-scheduler
+termcolor
+timm
+torch
+torchvision
+wandb

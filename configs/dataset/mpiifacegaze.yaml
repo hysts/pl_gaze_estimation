@@ -1,0 +1,25 @@
+DATASET:
+  NAME: MPIIFaceGaze
+  DATASET_PATH: ~/datasets/MPIIFaceGaze.h5
+  IMAGE_SIZE: 224
+  N_CHANNELS: 3
+  MEAN: [0.485, 0.456, 0.406]  # RGB
+  STD: [0.229, 0.224, 0.225]  # RGB
+  TRANSFORM:
+    TRAIN:
+      HORIZONTAL_FLIP: false
+      RESIZE: ${DATASET.IMAGE_SIZE}
+      #COLOR_JITTER:
+      #  BRIGHTNESS: 0.4
+      #  CONTRAST: 0.4
+      #  SATURATION: 0.4
+      #  HUE: 0.4
+    VAL:
+      RESIZE: ${DATASET.IMAGE_SIZE}
+    TEST:
+      RESIZE: ${DATASET.IMAGE_SIZE}
+EXPERIMENT:
+  TEST_ID: 0
+VAL:
+  USE_TEST_AS_VAL: false
+  VAL_RATIO: 0.1
