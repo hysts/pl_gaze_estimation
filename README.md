@@ -108,6 +108,11 @@ The learning rate was multiplied by 0.1 at epochs 10, 13, and 14.
 | HRNet-64           | yes   | V100x8 | 16        | 64         | AdamW     | 0.0008 | 0.05         |      3h11m    | 4.302           | 0.05523  |
 | ResNeSt269e        | yes   | V100x8 | 16        | 56         | AdamW     | 0.0008 | 0.05         |      5h31m    | 4.045           | 0.05200  |
 
+## Related repos
+
+- https://github.com/hysts/pytorch_mpiigaze
+- https://github.com/hysts/pytorch_mpiigaze_demo
+
 ## References
 
 - Zhang, Xucong, Seonwook Park, Thabo Beeler, Derek Bradley, Siyu Tang, and Otmar Hilliges. "ETH-XGaze: A Large Scale Dataset for Gaze Estimation under Extreme Head Pose and Gaze Variation." In European Conference on Computer Vision (ECCV), 2020. [arXiv:2007.15837](https://arxiv.org/abs/2007.15837), [Project Page](https://ait.ethz.ch/projects/2020/ETH-XGaze/), [GitHub](https://github.com/xucong-zhang/ETH-XGaze), [Leaderboard](https://competitions.codalab.org/competitions/28930)
