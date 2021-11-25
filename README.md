@@ -76,6 +76,27 @@ docker-compose build train
 docker-compose run --rm -u $(id -u):$(id -g) -v /path/to/datasets:/datasets train python train.py --configs /path/to/your/config.yaml
 ```
 
+## Results on ETH-XGaze dataset
+
+All the results in the table below are of a single run.
+In these experiments, the data of subjects with id 1, 23, 24, 35, 38, 46, 58, 63, 70, and 78
+were used as the validation data.
+The models were trained for 15 epochs with a multi-step learning rate schedule.
+The learning rate was multiplied by 0.1 at epochs 10, 13, and 14.
+
+|  Model             | hflip | GPU    | precision | batch size | optimizer | lr     | weight decay | training time | val angle error | val loss |
+|--------------------|-------|--------|-----------|------------|-----------|--------|--------------|---------------|-----------------|----------|
+| EfficientNet-lite0 | yes   | V100   | 32        | 64         | Adam      | 0.0001 | 0            |      4h42m    | 5.330           | 0.06970  |
+| EfficientNet-b0    | yes   | V100   | 32        | 64         | Adam      | 0.0001 | 0            |      5h58m    | 5.139           | 0.06672  |
+| ResNet18           | yes   | V100   | 32        | 64         | Adam      | 0.0001 | 0            |      4h04m    | 4.878           | 0.06427  |
+| ResNet50           | yes   | V100   | 32        | 64         | Adam      | 0.0001 | 0            |      8h42m    | 4.720           | 0.06087  |
+| HRNet-18           | yes   | V100   | 32        | 64         | Adam      | 0.0001 | 0            |     21h56m    | 4.657           | 0.05937  |
+| ResNeSt26d         | yes   | V100   | 32        | 64         | Adam      | 0.0001 | 0            |      8h02m    | 4.409           | 0.05678  |
+| RegNetY160         | yes   | V100   | 32        | 64         | Adam      | 0.0001 | 0            |   1d05h30m    | 4.377           | 0.05638  |
+| Swin-S             | yes   | V100   | 32        | 64         | Adam      | 0.0001 | 0            |   1d00h08m    | 4.318           | 0.05629  |
+| HRNet-64           | yes   | V100x8 | 16        | 64         | AdamW     | 0.0008 | 0.05         |      3h11m    | 4.302           | 0.05523  |
+| ResNeSt269e        | yes   | V100x8 | 16        | 56         | AdamW     | 0.0008 | 0.05         |      5h31m    | 4.045           | 0.05200  |
+
 ## References
 
 - Zhang, Xucong, Seonwook Park, Thabo Beeler, Derek Bradley, Siyu Tang, and Otmar Hilliges. "ETH-XGaze: A Large Scale Dataset for Gaze Estimation under Extreme Head Pose and Gaze Variation." In European Conference on Computer Vision (ECCV), 2020. [arXiv:2007.15837](https://arxiv.org/abs/2007.15837), [Project Page](https://ait.ethz.ch/projects/2020/ETH-XGaze/), [GitHub](https://github.com/xucong-zhang/ETH-XGaze)
