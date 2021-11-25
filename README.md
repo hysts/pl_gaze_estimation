@@ -5,7 +5,7 @@ Training code for gaze estimation models using MPIIGaze, MPIIFaceGaze, and ETH-X
 ## Installation
 
 - Linux (Tested on Ubuntu only)
-- Python >= 3.7
+- Python >= 3.9
 
 ```bash
 pip install -r requirements.txt
@@ -49,6 +49,7 @@ You need to download and preprocess the dataset before training by running the f
 bash scripts/download_mpiigaze_dataset.sh
 python scripts/preprocess_mpiigaze.py --dataset datasets/MPIIGaze -o datasets/
 ```
+(Additional packages are required to preprocess the dataset. See the [code](scripts/preprocess_mpiigaze.py).)
 
 ### MPIIFaceGaze
 
@@ -65,6 +66,7 @@ You need to download and preprocess the dataset before training by running the f
 bash scripts/download_mpiifacegaze_dataset.sh
 python scripts/preprocess_mpiifacegaze.py --dataset datasets/MPIIFaceGaze_normalized -o datasets/
 ```
+(Additional packages are required to preprocess the dataset. See the [code](scripts/preprocess_mpiifacegaze.py).)
 
 ### ETH-XGaze
 
@@ -80,6 +82,9 @@ python train.py \
 ```
 
 ## Docker Environment
+
+docker-compose 1.29.2 is required.
+
 ### Build
 ```bash
 docker-compose build train
