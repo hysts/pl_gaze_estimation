@@ -32,8 +32,6 @@ def get_trainer(config):
         accelerator=config.DEVICE.ACCELERATOR,
         sync_batchnorm=config.DEVICE.SYNC_BN,
         precision=config.DEVICE.PRECISION,
-        amp_backend=config.DEVICE.AMP.BACKEND,
-        amp_level=config.DEVICE.AMP.LEVEL,
         deterministic=config.DEVICE.CUDNN.DETERMINISTIC,
         benchmark=config.DEVICE.CUDNN.BENCHMARK,
         progress_bar_refresh_rate=config.LOG.PROGRESS_BAR_REFRESH_RATE,

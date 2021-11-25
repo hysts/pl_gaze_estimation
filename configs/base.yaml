@@ -8,9 +8,6 @@ DEVICE:
   CUDNN:
     BENCHMARK: true
     DETERMINISTIC: false
-  AMP:
-    BACKEND: native
-    LEVEL: O0
 EXPERIMENT:
   SEED: 0
   ROOT_DIR : experiments

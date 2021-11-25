@@ -3,8 +3,9 @@ import time
 from typing import Any, Optional
 
 import pytorch_lightning as pl
+import torch
 from omegaconf import DictConfig, OmegaConf
-from pytorch_lightning.callbacks import Callback, ProgressBar
+from pytorch_lightning.callbacks import Callback, TQDMProgressBar
 from pytorch_lightning.utilities.distributed import rank_zero_only
 from pytorch_lightning.utilities.types import STEP_OUTPUT
 
@@ -17,12 +18,12 @@ def get_callbacks(config: DictConfig,
             filename=config.LOG.CHECKPOINT.FILENAME,
             save_top_k=config.LOG.CHECKPOINT.TOP_K,
             save_last=config.LOG.CHECKPOINT.SAVE_LAST,
-            every_n_val_epochs=config.LOG.CHECKPOINT.PERIOD,
+            every_n_epochs=config.LOG.CHECKPOINT.PERIOD,
             verbose=config.LOG.CHECKPOINT.VERBOSE),
         SaveConfigCallback(config, output_dir),
     ]
     if not config.LOG.SHOW_PROGRESS_BAR:
-        callbacks.append(ProgressBar(refresh_rate=0))
+        callbacks.append(TQDMProgressBar(refresh_rate=0))
     if config.LOG.LOG_ETA:
         callbacks.append(ETACallback())
 
@@ -62,7 +63,8 @@ class ETACallback(Callback):
         self.val_iterations = 0
         self.remaining_val_iterations = 0
         self.val_eta = 0
-        self._tic = 0.
+        self._train_start_time = 0.
+        self._val_start_time = 0.
 
     @property
     def trainer(self):
@@ -97,7 +99,7 @@ class ETACallback(Callback):
     @rank_zero_only
     def on_train_epoch_start(self, trainer: 'pl.Trainer',
                              pl_module: 'pl.LightningModule') -> None:
-        self._tic = time.time()
+        self._train_start_time = time.time()
 
     @rank_zero_only
     def on_train_batch_end(
@@ -107,22 +109,26 @@ class ETACallback(Callback):
         outputs: STEP_OUTPUT,
         batch: Any,
         batch_idx: int,
-        dataloader_idx: int,
     ) -> None:
-        elapsed = self.train_elapsed + time.time() - self._tic
+        elapsed = self.train_elapsed + time.time() - self._train_start_time
         self.train_iterations += 1
         self.remaining_train_iterations -= 1
         if self._should_log(trainer):
             speed = self.train_iterations / elapsed
-            self.train_eta = round(self.remaining_train_iterations / speed)
+            self.train_eta = self.remaining_train_iterations / speed
             epoch_eta = (self.remaining_train_iterations %
                          self.total_train_batches) / speed
             trainer.lightning_module.log_dict(
                 {
-                    'time/eta': self.train_eta + self.val_eta,
-                    'time/epoch_eta': epoch_eta,
-                    'time/train_batch_index': batch_idx,
-                    'time/train_total_batches': self.total_train_batches,
+                    'time/eta':
+                    self.train_eta + self.val_eta,
+                    'time/epoch_eta':
+                    epoch_eta,
+                    'time/train_batch_index':
+                    torch.tensor(batch_idx, dtype=torch.float32),
+                    'time/train_total_batches':
+                    torch.tensor(self.total_train_batches,
+                                 dtype=torch.float32),
                 },
                 on_step=True,
                 on_epoch=False)
@@ -135,7 +141,7 @@ class ETACallback(Callback):
                            trainer: 'pl.Trainer',
                            pl_module: 'pl.LightningModule',
                            unused: Optional[Any] = None) -> None:
-        self.train_elapsed += time.time() - self._tic
+        self.train_elapsed += time.time() - self._train_start_time
 
     @rank_zero_only
     def on_validation_start(self, trainer: 'pl.Trainer',
@@ -148,7 +154,7 @@ class ETACallback(Callback):
     @rank_zero_only
     def on_validation_epoch_start(self, trainer: 'pl.Trainer',
                                   pl_module: 'pl.LightningModule') -> None:
-        self._tic = time.time()
+        self._val_start_time = time.time()
 
     @rank_zero_only
     def on_validation_batch_end(
@@ -160,11 +166,11 @@ class ETACallback(Callback):
         batch_idx: int,
         dataloader_idx: int,
     ) -> None:
-        elapsed = self.val_elapsed + time.time() - self._tic
+        elapsed = self.val_elapsed + time.time() - self._val_start_time
         self.val_iterations += 1
         self.remaining_val_iterations -= 1
         speed = self.val_iterations / elapsed
-        self.val_eta = round(self.remaining_val_iterations / speed)
+        self.val_eta = self.remaining_val_iterations / speed
         trainer.lightning_module.log_dict({'time/val_speed': speed},
                                           on_step=False,
                                           on_epoch=True)
@@ -172,7 +178,7 @@ class ETACallback(Callback):
     @rank_zero_only
     def on_validation_epoch_end(self, trainer: 'pl.Trainer',
                                 pl_module: 'pl.LightningModule') -> None:
-        self.val_elapsed += time.time() - self._tic
+        self.val_elapsed += time.time() - self._val_start_time
 
     @staticmethod
     def _should_log(trainer) -> bool:

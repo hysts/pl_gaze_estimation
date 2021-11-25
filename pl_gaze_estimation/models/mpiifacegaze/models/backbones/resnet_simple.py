@@ -1,6 +1,5 @@
 import torch
 import torchvision
-import torchvision.models.utils
 from omegaconf import DictConfig
 
 
@@ -21,7 +20,7 @@ class Network(torchvision.models.ResNet):
 
         pretrained_name = config.MODEL.BACKBONE.PRETRAINED
         if pretrained_name:
-            state_dict = torchvision.models.utils.load_state_dict_from_url(
+            state_dict = torch.hub.load_state_dict_from_url(
                 torchvision.models.resnet.model_urls[pretrained_name])
             self.load_state_dict(state_dict, strict=False)
 

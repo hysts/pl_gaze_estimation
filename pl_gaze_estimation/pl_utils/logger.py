@@ -118,8 +118,9 @@ class ExperimentWriter:
         ]
         if 'train_batch_index' in time_dict:
             res.append(
-                self._to_str('step', time_dict['train_batch_index'],
-                             label_color, time_dict['train_total_batches']))
+                self._to_str('step',
+                             int(time_dict['train_batch_index']), label_color,
+                             int(time_dict['train_total_batches'])))
 
         for key, val in time_dict.items():
             if key in ['train_speed', 'val_speed']:

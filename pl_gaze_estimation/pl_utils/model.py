@@ -15,7 +15,8 @@ class Model(pl.LightningModule):
         self.config = config
         self._train_time = 0.
         self._val_time = 0.
-        self._tic = time.time()
+        self._train_start_time = time.time()
+        self._val_start_time = time.time()
 
     def on_load_checkpoint(self, checkpoint: dict) -> None:
         self._train_time = checkpoint['train_time']
@@ -33,10 +34,10 @@ class Model(pl.LightningModule):
             self.logger.log_hyperparams(self.config)
 
     def on_train_epoch_start(self) -> None:
-        self._tic = time.time()
+        self._train_start_time = time.time()
 
     def on_train_epoch_end(self, unused=None) -> None:
-        elapsed = time.time() - self._tic
+        elapsed = time.time() - self._train_start_time
         self._train_time += elapsed
         self.log_dict(
             {
@@ -47,7 +48,7 @@ class Model(pl.LightningModule):
             logger=True)
 
     def on_validation_epoch_start(self) -> None:
-        self._tic = time.time()
+        self._val_start_time = time.time()
 
     def _accumulate_data(self, outputs):
         keys = [key for key in outputs[0].keys() if key != 'size']
@@ -73,7 +74,7 @@ class Model(pl.LightningModule):
         return res | {'total': total}
 
     def on_validation_epoch_end(self) -> None:
-        elapsed = time.time() - self._tic
+        elapsed = time.time() - self._val_start_time
         self._val_time += elapsed
         self.log_dict(
             {
@@ -95,7 +96,7 @@ class Model(pl.LightningModule):
                             optimizer: Optimizer, optimizer_idx: int) -> None:
         optimizer.zero_grad(set_to_none=True)
 
-    def get_progress_bar_dict(self) -> dict[str, Union[int, str]]:
-        items = super().get_progress_bar_dict()
+    def get_metrics(self) -> dict[str, Union[int, str]]:
+        items = super().get_metrics()
         items.pop('v_num', None)
         return items

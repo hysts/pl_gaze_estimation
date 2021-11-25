@@ -44,7 +44,7 @@ class Model(PlModel):
         outputs = self(images, poses)
         loss = self.loss_fn(outputs, gazes)
         angle_error = compute_angle_error(outputs, gazes).mean()
-        return {'loss': loss, 'angle_error': angle_error}
+        return {'loss': loss, 'angle_error': angle_error.detach()}
 
     def training_step(self, batch, batch_index):
         res = self._evaluate(batch)
@@ -55,11 +55,12 @@ class Model(PlModel):
                       on_epoch=True,
                       logger=True,
                       sync_dist=True,
-                      sync_dist_op='mean')
+                      reduce_fx='mean')
         self.log_dict(
             {
                 'time/elapsed':
-                time.time() - self._tic + self._train_time + self._val_time
+                time.time() - self._train_start_time + self._train_time +
+                self._val_time
             },
             on_step=True,
             on_epoch=False,
