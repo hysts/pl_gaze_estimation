@@ -2,10 +2,10 @@ coloredlogs
 h5py
 omegaconf
 pillow-simd
-pytorch-lightning
+pytorch-lightning<1.5
 pytorch-warmup-scheduler
 termcolor
 timm
-torch
-torchvision
+torch<1.10
+torchvision<0.11
 wandb
