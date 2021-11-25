@@ -41,6 +41,12 @@ python train.py --configs configs/examples/mpiigaze_lenet.yaml \
                           EXPERIMENT.OUTPUT_DIR exp0000/$(printf %02d ${test_id})
 ```
 
+You need to download and preprocess the dataset before training by running the following commands:
+```bash
+bash scripts/download_mpiigaze_dataset.sh
+python scripts/preprocess_mpiigaze.py --dataset datasets/MPIIGaze -o datasets/
+```
+
 ### MPIIFaceGaze
 
 ```bash
@@ -49,6 +55,12 @@ python train.py --configs configs/examples/mpiifacegaze.yaml \
                 --options SCHEDULER.WARMUP.EPOCHS 3 \
                           EXPERIMENT.TEST_ID ${test_id} \
                           EXPERIMENT.OUTPUT_DIR exp0000/$(printf %02d ${test_id})
+```
+
+You need to download and preprocess the dataset before training by running the following commands:
+```bash
+bash scripts/download_mpiifacegaze_dataset.sh
+python scripts/preprocess_mpiifacegaze.py --dataset datasets/MPIIFaceGaze_normalized -o datasets/
 ```
 
 ### ETH-XGaze
@@ -63,7 +75,6 @@ python train.py \
         DATASET.TRANSFORM.TRAIN.HORIZONTAL_FLIP true \
         EXPERIMENT.OUTPUT_DIR exp0000
 ```
-
 
 ## Docker Environment
 ### Build
