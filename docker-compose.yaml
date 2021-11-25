@@ -1,14 +1,12 @@
-version: "2.3"
+version: "3.8"
 services:
   train:
     image: pl_gaze_estimation
-    runtime: nvidia
-    ipc: host
     build:
       context: .
       dockerfile: ./docker/Dockerfile
       args:
-        PYTHON_VERSION: ${PYTHON_VERSION:-3.9.6}
+        PYTHON_VERSION: ${PYTHON_VERSION:-3.9.9}
     environment:
       TORCH_HOME: /.torch
     tty: true
@@ -18,3 +16,10 @@ services:
       - ${HOME}/.netrc:/.netrc
       - ${HOME}/.config:/.config
     working_dir: /work
+    ipc: host
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              capabilities: ["gpu"]
