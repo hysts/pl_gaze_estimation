@@ -1,5 +1,8 @@
 # pl_gaze_estimation
 
+[![MIT License](https://img.shields.io/badge/license-MIT-green)](https://opensource.org/licenses/MIT)
+[![GitHub stars](https://img.shields.io/github/stars/hysts/pl_gaze_estimation.svg?style=flat-square&logo=github&label=Stars&logoColor=white)](https://github.com/hysts/pl_gaze_estimation)
+
 Training code for gaze estimation models using MPIIGaze, MPIIFaceGaze, and ETH-XGaze.
 
 ## Installation
