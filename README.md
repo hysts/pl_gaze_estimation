@@ -5,6 +5,8 @@
 
 Training code for gaze estimation models using MPIIGaze, MPIIFaceGaze, and ETH-XGaze.
 
+https://user-images.githubusercontent.com/25161192/143683988-06ab6495-ae97-4201-b3f1-39dacf4bc69c.mp4
+
 ## Installation
 
 - Linux (Tested on Ubuntu only)
